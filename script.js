@@ -27,7 +27,7 @@ async function getMealsBySearch(term) {
 function addMeal(mealData, random) {
   const meal = document.createElement('div');
   meal.classList.add('meal');
-  console.log(mealData);
+
   meal.innerHTML = `
        <div class="meal-header">
           ${random ? `<h2>Random Receipe</h2>` : ''}
@@ -46,18 +46,18 @@ function addMeal(mealData, random) {
 
   const btn = document.querySelector('.meal-body .btn');
   btn.addEventListener('click', () => {
-    btn.classList.toggle('active');
-    if (btn.classList == 'active') {
+    if (btn.classList.contains('active')) {
       removeMealLS(mealData.idMeal);
+      btn.classList.remove('active');
     } else {
       addMealLS(mealData.idMeal);
+      btn.classList.add('active');
     }
   });
 }
 
 function addMealLS(mealId) {
-  const mealIds = getMealLS();
-  localStorage.setItem('mealIds', JSON.stringify([mealIds, mealId]));
+  localStorage.setItem('mealIds', JSON.stringify(mealId));
 }
 
 function removeMealLS(mealId) {
@@ -71,6 +71,6 @@ function removeMealLS(mealId) {
 
 function getMealLS() {
   const mealId = JSON.parse(localStorage.getItem('mealsIds'));
-
-  return mealId;
+  console.log(mealId);
+  return mealId == null ? [] : mealIds;
 }
