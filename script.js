@@ -20,10 +20,8 @@ async function getMealById(id) {
 
   const respData = await resp.json();
   const meal = respData.meals[0];
-  console.log(meal);
   return meal;
 }
-getMealById(52772);
 
 async function getMealsBySearch(term) {
   const meals = await fetch(
@@ -60,37 +58,41 @@ function addMeal(mealData) {
       addMealLS(mealData.idMeal);
       btn.classList.add('active');
     }
+    favMeals.innerHTML = '';
     fetcFavMeal();
   });
 }
 
 function addMealLS(mealId) {
-  localStorage.setItem('mealIds', JSON.stringify([mealId]));
+  const mealIdss = getMealLS();
+  localStorage.setItem('mealIds', JSON.stringify([...mealIdss, mealId]));
 }
 
 function removeMealLS(mealId) {
-  const mealIds = getMealLS();
+  const mealIdss = getMealLS();
+  console.log(mealIdss);
   localStorage.setItem(
     'mealIds',
-    JSON.stringify(mealIds.filter((id) => id === mealIds))
+    JSON.stringify(mealIdss.filter((id) => id !== mealId))
   );
 }
 
 function getMealLS() {
   const mealIdss = JSON.parse(localStorage.getItem('mealIds'));
-  return mealIdss;
+  return mealIdss == null ? [] : mealIdss;
 }
 
 async function fetcFavMeal() {
   const mealIds = getMealLS();
-  console.log([...mealIds]);
+  console.log(mealIds);
 
-  const mealId = mealIds[0];
-  console.log(mealId);
-  meal = await getMealById(mealId);
+  for (let i = 0; i < mealIds.length; i++) {
+    mealId = mealIds[i];
+    meal = await getMealById(mealId);
 
-  console.log(meal);
-  addMealFav(meal);
+    console.log(meal);
+    addMealFav(meal);
+  }
 }
 
 function addMealFav(mealData) {
