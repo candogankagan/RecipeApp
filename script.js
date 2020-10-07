@@ -2,7 +2,7 @@ const meals = document.getElementById('meals');
 const favMeals = document.getElementById('fav-meals');
 
 getRandomMeal();
-fetcFavMeal();
+fetchFavMeal();
 
 async function getRandomMeal() {
   const resp = await fetch(
@@ -58,8 +58,7 @@ function addMeal(mealData) {
       addMealLS(mealData.idMeal);
       btn.classList.add('active');
     }
-    favMeals.innerHTML = '';
-    fetcFavMeal();
+    fetchFavMeal();
   });
 }
 
@@ -82,22 +81,21 @@ function getMealLS() {
   return mealIdss == null ? [] : mealIdss;
 }
 
-async function fetcFavMeal() {
+async function fetchFavMeal() {
   const mealIds = getMealLS();
   console.log(mealIds);
+  favMeals.innerHTML = '';
 
   for (let i = 0; i < mealIds.length; i++) {
     mealId = mealIds[i];
     meal = await getMealById(mealId);
 
-    console.log(meal);
     addMealFav(meal);
   }
 }
 
 function addMealFav(mealData) {
   const meal = document.createElement('li');
-
   meal.innerHTML = `
             <img
               src="${mealData.strMealThumb}"
@@ -105,7 +103,14 @@ function addMealFav(mealData) {
             />
             <br />
             <span>${mealData.strMeal}</span>
+            <button class="btnn"><i class="fa fa-window-close"></i></button>
           `;
 
+  const btn = meal.querySelector('.btnn');
+  btn.addEventListener('click', () => {
+    removeMealLS(mealData.idMeal);
+    fetchFavMeal();
+  });
   favMeals.appendChild(meal);
 }
+// localStorage.clear();
