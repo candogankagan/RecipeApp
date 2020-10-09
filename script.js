@@ -13,7 +13,7 @@ async function getRandomMeal() {
   const respData = await resp.json();
   const randomMeal = respData.meals[0];
   console.log(randomMeal);
-  addMeal(randomMeal);
+  addMeal(randomMeal, (a = false));
 }
 
 async function getMealById(id) {
@@ -36,13 +36,13 @@ async function getMealsBySearch(term) {
   return meal;
 }
 
-function addMeal(mealData) {
+function addMeal(mealData, a = true) {
   const meal = document.createElement('div');
   meal.classList.add('meal');
 
   meal.innerHTML = `
        <div class="meal-header">
-          <h2>Random Receipe</h2>
+          <h2>${a ? 'Searched Meal' : 'Random Meal'}</h2>
           <img
             src="${mealData.strMealThumb}"
             id="big"
